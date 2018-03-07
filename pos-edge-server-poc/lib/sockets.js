@@ -1,3 +1,6 @@
+const db = require("../models");
+const { wrap: async}=require('co');
+
 module.exports = function Server(socket, server) {
 	var io = socket.listen(server);
 	console.log(server)
@@ -5,10 +8,12 @@ module.exports = function Server(socket, server) {
 		console.log( "New client !" );
 		
 		client.on( 'message', function( data ) {
+			db.Message.create(data).then(function (dbMsg) {
+				io.sockets.emit( 'message', data );
+			});
 			console.log( 'Message received ' + data.sender + ":" + data.text );
 			
-			//client.broadcast.emit( 'message', { name: data.name, message: data.message } );
-			io.sockets.emit( 'message', data );
+			
 		});
 	});
 
