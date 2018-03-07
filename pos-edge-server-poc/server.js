@@ -6,11 +6,15 @@
 // =============================================================
 var express = require("express");
 var bodyParser = require("body-parser");
+var	http 	 = require( 'http' );
+var	connect  = require('connect');
 
 // Sets up the Express App
 // =============================================================
 var app = express();
-var server = module.exports = http.createServer( app );
+var server = http.createServer( app );
+var socket 	 = require( 'socket.io' );
+require('./lib/sockets.js')(socket, server);
 
 var PORT = 8080;
 

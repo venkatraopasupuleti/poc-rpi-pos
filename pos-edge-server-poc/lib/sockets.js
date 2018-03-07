@@ -1,6 +1,6 @@
 module.exports = function Server(socket, server) {
 	var io = socket.listen(server);
-
+	console.log(server)
 	io.sockets.on( 'connection', function( client ) {
 		console.log( "New client !" );
 		
