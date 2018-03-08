@@ -3,14 +3,7 @@
 const db = require("../models");
 const { wrap: async}=require('co');
 var firebase = require("firebase");
-var config = {
-    apiKey: "AIzaSyBMXCPYCx0eCb5c1orujwW9VIoV5oYPHFI",
-    authDomain: "pos-poc-rpi.firebaseapp.com",
-    databaseURL: "https://pos-poc-rpi.firebaseio.com",
-    projectId: "pos-poc-rpi",
-    storageBucket: "pos-poc-rpi.appspot.com",
-    messagingSenderId: "879204075084"
-};
+var config = require("../config/firebase.conf.json");
 firebase.initializeApp(config);
 firebase.database().ref('/events').on('value',function(snapshot){
     try{
