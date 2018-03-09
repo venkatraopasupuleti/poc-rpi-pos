@@ -36,23 +36,10 @@
   firebase.initializeApp(config);
   firebase.database().ref('/messages').on('value',function(snapshot){
     try{
-        var entries=snapshot.val();
-        firebase.database().ref('/events').set([]);
-        insertMessages(entries,function(insertedMsgs){
-            if(io){
-                io.sockets.emit( 'broadcast', data );
-            }
-            getAllMessages(function(dbMsgs){
-                firebase.database().ref('/messages').set(dbMsgs.toJSON());
-            });
-        })
-        /*db.Message.bulkCreate(entries).then(()=>{
-            db.Message.findAll({
-                where: {}
-            }).then(function (dbMsgs) {
-                firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
-            });
-        });*/
+        if(!socket.connected){
+            var messages=snapshot.val();
+            paintdata(messages);
+        }
     }catch(e){
         return;
     }
@@ -65,11 +52,15 @@
             var message_obj={
                 "id":new Date().getTime(),
                 "text":$('#m').val(),
-                "sender":"test"
+                "sender":localStorage.getItem("username")
             }
-          socket.emit('message', message_obj);
-          $('#m').val('');
-          return false;
+            if(socket.connected){
+                socket.emit('message', message_obj);
+            }else{
+                firebase.database().ref('/events').push(message_obj);     
+            }
+            $('#m').val('');
+            return false;
         });
         socket.on('message', function(msg){
             updatedata();
@@ -92,12 +83,14 @@
             "processData": false,
         }
         $.ajax(settings).done(function (response) {
-            console.log(response);
-            $("#messages").empty();
-            response.forEach(msg => {
-                $('#messages').append($('<li>').text(msg.text));
-                window.scrollTo(0, document.body.scrollHeight); 
-            });
+            paintdata(response);
+        });
+      }
+      function paintdata(response){
+        $("#messages").empty();
+        response.forEach(msg => {
+            $('#messages').append($('<li>').text(msg.text));
+            window.scrollTo(0, document.body.scrollHeight); 
         });
       }
     </script>
