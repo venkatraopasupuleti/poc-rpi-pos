@@ -11,7 +11,12 @@ module.exports = function(sequelize, DataTypes) {
           validate: {
               len: [1]
             }
-        }
+      },
+      id:{
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull:false
+      }
     });
   
   

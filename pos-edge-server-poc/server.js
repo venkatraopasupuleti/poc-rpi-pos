@@ -14,7 +14,7 @@ var	connect  = require('connect');
 var app = express();
 var server = http.createServer( app );
 var socket 	 = require( 'socket.io' );
-require('./lib/sockets.js')(socket, server);
+var socketcommunication=require('./lib/sockets.js')(socket, server);
 
 var PORT = 8080;
 
@@ -39,7 +39,7 @@ app.set("view engine", "handlebars");*/
 
 //Setting Routes
 
-require('./config/routes.js')(app);
+require('./config/routes.js')(app,socketcommunication.getwebsocket());
 
 // Routes
 // =============================================================
@@ -54,7 +54,7 @@ app.use(viewController);*/
 // Syncing our sequelize models and then starting our Express app
 // =============================================================
 db.sequelize.sync().then(function() {
-  app.listen(PORT, function() {
+  server.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
   });
 });

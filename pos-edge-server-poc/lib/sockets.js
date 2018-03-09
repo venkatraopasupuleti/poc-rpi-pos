@@ -1,8 +1,8 @@
 const db = require("../models");
 const { wrap: async}=require('co');
-
+var io=null;
 module.exports = function Server(socket, server) {
-	var io = socket.listen(server);
+	io = socket.listen(server);
 	console.log(server)
 	io.sockets.on( 'connection', function( client ) {
 		console.log( "New client !" );
@@ -12,10 +12,10 @@ module.exports = function Server(socket, server) {
 				io.sockets.emit( 'message', data );
 			});
 			console.log( 'Message received ' + data.sender + ":" + data.text );
-			
-			
 		});
 	});
-
+	this.getwebsocket=function(){
+		return io;
+	}
 	return this;
 };
