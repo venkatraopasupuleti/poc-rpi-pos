@@ -9,12 +9,18 @@ var bodyParser = require("body-parser");
 var	http 	 = require( 'http' );
 var	connect  = require('connect');
 
+// For firebase connection
+// =================================================
+var firebase = require("firebase");
+var config = require("./config/firebase.conf.json");
+firebase.initializeApp(config);
+//=====================================================/
 // Sets up the Express App
 // =============================================================
 var app = express();
 var server = http.createServer( app );
 var socket 	 = require( 'socket.io' );
-var socketcommunication=require('./lib/sockets.js')(socket, server);
+var socketcommunication=require('./lib/sockets.js')(socket, server,firebase);
 
 var PORT = 8080;
 
@@ -39,7 +45,7 @@ app.set("view engine", "handlebars");*/
 
 //Setting Routes
 
-require('./config/routes.js')(app,socketcommunication.getwebsocket());
+require('./config/routes.js')(app,socketcommunication.getwebsocket(),firebase);
 
 // Routes
 // =============================================================

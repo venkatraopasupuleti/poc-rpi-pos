@@ -2,33 +2,8 @@
 // Requiring our models
 const db = require("../models");
 const { wrap: async}=require('co');
-var firebase = require("firebase");
-var config = require("../config/firebase.conf.json");
+var firebase = null;
 var io=null;
-firebase.initializeApp(config);
-firebase.database().ref('/events').on('value',function(snapshot){
-    try{
-        var entries=snapshot.val();
-        firebase.database().ref('/events').set([]);
-        insertMessages(entries,function(insertedMsgs){
-            if(io){
-                io.sockets.emit( 'broadcast', data );
-            }
-            getAllMessages(function(dbMsgs){
-                firebase.database().ref('/messages').set(dbMsgs.toJSON());
-            });
-        })
-        /*db.Message.bulkCreate(entries).then(()=>{
-            db.Message.findAll({
-                where: {}
-            }).then(function (dbMsgs) {
-                firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
-            });
-        });*/
-    }catch(e){
-        return;
-    }
-});
 
 exports.get=async(function* (req,res){
     try{
@@ -62,7 +37,9 @@ exports.set=async(function* (req,res){
                 io.sockets.emit( 'broadcast', data );
             }
             getAllMessages(function(dbMsgs){
-                firebase.database().ref('/messages').set(dbMsgs.toJSON());
+                if(firebase){
+                    firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
+                }
                 res.json(dbMsgs);
             });
         });
@@ -86,4 +63,41 @@ const insertMessages=function(entries,callback){
 
 exports.setwebsocket=function(websocket){
     io=websocket;
+}
+
+exports.setfirebase=function(firebaseobj){
+    firebase=firebaseobj;
+    firebase.database().ref('/events').on('value',function(snapshot){
+        try{
+            var entries=snapshot.val();
+            
+            if(!(entries instanceof Array)){
+                var keys = Object.keys(entries);
+                var entriesArray=[];
+                for(var i=0;i<keys.length;i++){
+                    entriesArray.push(entries[keys[i]]);
+                }
+                entries=entriesArray;
+            }
+    
+            insertMessages(entries,function(insertedMsgs){
+                firebase.database().ref('/events').set([]);
+                if(io){
+                    io.sockets.emit( 'broadcast', insertedMsgs );
+                }
+                getAllMessages(function(dbMsgs){
+                    firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
+                });
+            });
+            /*db.Message.bulkCreate(entries).then(()=>{
+                db.Message.findAll({
+                    where: {}
+                }).then(function (dbMsgs) {
+                    firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
+                });
+            });*/
+        }catch(e){
+            return;
+        }
+    });
 }
