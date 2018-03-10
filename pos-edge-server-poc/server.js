@@ -57,4 +57,7 @@ app.use(viewController);*/
   server.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
   });
+  /* app.get('/home', function(req, res) {
+    res.sendFile('./home.html');
+  }); */
 //});
