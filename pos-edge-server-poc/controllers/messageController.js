@@ -82,10 +82,10 @@ exports.setfirebase=function(firebaseobj){
     
             insertMessages(entries,function(insertedMsgs){
                 firebase.database().ref('/events').set([]);
-                if(io){
-                    io.sockets.emit( 'broadcast', insertedMsgs );
-                }
                 getAllMessages(function(dbMsgs){
+                    if(io){
+                        io.sockets.emit( 'message', dbMsgs );
+                    }
                     firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
                 });
             });
