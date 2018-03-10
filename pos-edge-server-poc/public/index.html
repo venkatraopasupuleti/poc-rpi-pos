@@ -59,54 +59,15 @@
   });
 </script>
 <script>
-      $(function () {
-        var socket = io();
-        $('form').submit(function(){
-            var message_obj={
-                "id":new Date().getTime(),
-                "text":$('#m').val(),
-                "sender":"test"
-            }
-          socket.emit('message', message_obj);
-          $('#m').val('');
-          return false;
-        });
-        socket.on('message', function(msg){
-            updatedata();
-        });
-      });
-      $( document ).ready(function() {
-          updatedata();
-      });
-      function updatedata(){
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "/api/message",
-            "method": "GET",
-            "headers": {
-                "content-type": "application/json",
-                "cache-control": "no-cache",
-                "postman-token": "1f7bcc1d-5ba4-ca17-3eee-d9f57495b5f1"
-            },
-            "processData": false,
-        }
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-            $("#messages").empty();
-            response.forEach(msg => {
-                $('#messages').append($('<li>').text(msg.text));
-                window.scrollTo(0, document.body.scrollHeight);
-            });
-        });
+      function onLoad() {
+        $("#includedContent").load("login.html");
       }
+      onLoad();
       function onClickLoginBtn() {
         var username = document.getElementById('usernameTF').value;
         localStorage.setItem('Username', username);
         $("#includedContent").load("home.html");
       }
-      $("#includedContent").load("login.html");
-      console.log(1);
     </script>
   </body>
 </html>
