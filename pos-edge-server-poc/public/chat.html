@@ -48,6 +48,8 @@
                 if(!socket.connected){
                     var messages=snapshot.val();
                     paintdata(messages);
+                }else{
+                    updatedata();
                 }
             }catch(e){
                 return;
