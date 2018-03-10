@@ -1,176 +1,38 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Connectivity Test POC</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 20px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      #connectivity { background: #000; padding: 3px; position: fixed; top: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      #connectivity button { border: 0; padding: 10px; width: 49%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      #messages { margin-bottom: 40px }
-    </style>
-    <link rel="stylesheet" href="./app.css">
-  </head>
-  <body>
-<<<<<<< HEAD
-    <ul id="messages"></ul>
-    <div id="connectivity">
-        <button id="firebaseconn">Firebase</button>
-        <button id="socketioconn">Socket.IO</button>
-    </div>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-=======
-    <div id="includedContent" style="height: 100%; width: 100%;">
-
-    </div>
->>>>>>> 92a2261ef8b7a227a2c9c31759a42b7d3ad9f3a4
-    <script src="js/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
-<script>
-<<<<<<< HEAD
-      $(function () {
-        var socket = io();
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyBMXCPYCx0eCb5c1orujwW9VIoV5oYPHFI",
-            authDomain: "pos-poc-rpi.firebaseapp.com",
-            databaseURL: "https://pos-poc-rpi.firebaseio.com",
-            projectId: "pos-poc-rpi",
-            storageBucket: "pos-poc-rpi.appspot.com",
-            messagingSenderId: "879204075084"
-        };
-        firebase.initializeApp(config);
-        firebase.database().ref('/messages').on('value',function(snapshot){
-            try{
-                if(!socket.connected){
-                    var messages=snapshot.val();
-                    paintdata(messages);
+<head>
+        <title>Connectivity Test POC</title>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font: 20px Helvetica, Arial; }
+          form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+          #connectivity { background: #000; padding: 3px; position: fixed; top: 0; width: 100%; }
+          form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+          #connectivity button { border: 0; padding: 10px; width: 49%; margin-right: .5%; }
+          form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+          #messages { list-style-type: none; margin: 0; padding: 0; }
+          #messages li { padding: 5px 10px; }
+          #messages li:nth-child(odd) { background: #eee; }
+          #messages { margin-bottom: 40px }
+        </style>
+        <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+        <div style=" height: 100%; display: flex; flex-direction: column; align-items: center;">
+                <div style="background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAksAAABBCAMAAAD2ZxB/AAAAb1BMVEUAAAC0v9+vu92vu92zv+C4xeuxvt++y+quu92vu92wu96vu93e3v+vu920vuGvvN2wvN6vu92vvN6xvN2uut2vu92vu92vu92vvN2uvN2vu92xvN+vu92wu92vu920weWvvN2wu92xveCvu9yuutxsSTOzAAAAJHRSTlMAEPO7IAwvCOmqSe0D3hh4a/pcN9PLsqSFX1RDw5ZnE45xKJm5bnKBAAABiElEQVR42u3dWU7DQBRE0fLseMrggCFzQu9/jUjwg/hACBfIDvdswVa7+1ldJfxD56oSYPAckpOA8fZ1J8BhdRFgUT0KsEhLAQ7FEDQP+UO8iISpqsr4MJfn066ixYswVUXXaCa6Usq3Ajzr0lHvmrOAUfulTG9W7U6AwSr0AgyiMJfjAqYuqgsBFo/PAiz2BwEWVTmbqRgmrVqEXIDBsOQYd3+KPBNgsS43VxYJGOxDWtcbAWMdw1Ibjucw6JOgXZwKGC8kYc0MGgZZzMU6AAAAAAAAAMD9S5M44TcdHJJltkwEjBdnymIBrEuYDvZLAKbj6UmAxY7gNphEIZdIIYFDVbdxWPM2waBLi2bLrgkmu4WAX6rFiAgewI+c88+jgsDoEo7SiWbgci88pRMpMW4wlU50JTMCGEonyL2Fs3SifxBg0Qc+cnC4XcJe+KYb/wy+MFwoGqf+GH+vSsgphkcUTk1TkFMMg9t2Xbdncoph0CgbanKK4dGV5BTDI23JKYZHfyWn+KNXMe0QFe+skNkAAAAASUVORK5CYII=),url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOBAMAAAACpFvcAAAAJFBMVEUBK3IELnQvUownS4crTooWPX4ROXskSIYhRoQNNXkIMnYcQoE55osdAAAAZElEQVQI12MQYAACNpcEBisgzbjJWIHBZQIDg4SqYADDYk0GrqIEBgYg2bpFjQEERE28FzCAAaMAmALzRMsDGDxBYk1A7UZAHcJqDAkM4qoCnCYTwMIWRUBpkD3NpQIMcCDIAAAqcg+pYCTpAwAAAABJRU5ErkJggg==) repeat; height: 100px;  width: 100%; background-color: #00cccc; display: flex; align-items: center; justify-content: center;">
+                    <h1 style="color: #fff; font-family: OpenSansLight;">Welcome to Paytm Boxoffice POS POC</h1>
+                </div>
+                <span style="margin-top: 20px; font-family: OpenSansLight; font-weight: bold; font-size: 20px; ">Please Enter Username to Continue</span>
+                <div style="width: 300px; margin-top: 30px;">
+                  <span style=" font-family: OpenSansLight;">Username</span><br/>
+                  <input id="usernameTF" type="text" style=" font-weight: bold; font-size: 16px; font-family: OpenSansLight;width: 100%; margin-top: 10px; height: 40px; border-radius: 5px; outline: none; border: 1px #ccc solid; padding-left: 5px;" placeholder="Username or Phone Number" />
+                  <button onclick="onClickLoginBtn();" style="font-weight: bold; font-size: 16px;  font-family: OpenSansLight;margin-top: 20px; width: 100%; height: 41px; background-color: #33b5e5; color: #fff; text-align: center; outline: 0; box-shadow: none; border: 0; curson: pointer; border-radius: 6px;">Login</button>
+                </div>
+        </div>
+        <script>
+                onLoad();
+                function onClickLoginBtn() {
+                  var username = document.getElementById('usernameTF').value;
+                  localStorage.setItem('username', username);
+                  window.location = "./chat.html"
                 }
-            }catch(e){
-                return;
-            }
-        });
-        firebase.database().ref('.info/connected').on('value', function(connectedSnap) {
-            if (connectedSnap.val() === true) {
-                /* we're connected! */
-                $('#firebaseconn').css("background-color", "green");
-                console.log("firebase connected");
-                
-            } else {
-                console.log("firebase disconnected");
-                $('#firebaseconn').css("background-color", "red");
-                /* we're disconnected! */
-            }
-        });
-        $('form').submit(function(){
-            var message_obj={
-                "id":new Date().getTime(),
-                "text":$('#m').val(),
-                "sender":localStorage.getItem("username")
-            }
-            if(socket.connected){
-                socket.emit('message', message_obj);
-            }else{
-                firebase.database().ref('/events').push(message_obj);     
-            }
-            $('#m').val('');
-            return false;
-        });
-        socket.on('message', function(msg){
-            paintdata(msg);
-            updatedata();
-        });
-        socket.on('connect',function(msg){
-            console.log("socketio connected");
-            $('#socketioconn').css("background-color", "green");
-        });
-        socket.on('disconnect',function(msg){
-            console.log("socketio disconnected");
-            $('#socketioconn').css("background-color", "red");
-        });
-      });
-      $( document ).ready(function() {
-          updatedata();
-      });
-      function updatedata(){
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "/api/message",
-            "method": "GET",
-            "headers": {
-                "content-type": "application/json",
-                "cache-control": "no-cache",
-                "postman-token": "1f7bcc1d-5ba4-ca17-3eee-d9f57495b5f1"
-            },
-            "processData": false,
-        }
-        $.ajax(settings).done(function (response) {
-            paintdata(response);
-        });
-      }
-      function paintdata(response){
-        $("#messages").empty();
-        response.forEach(msg => {
-            $('#messages').append($('<li>').text(msg.sender+":"+msg.text));
-            window.scrollTo(0, document.body.scrollHeight); 
-        });
-=======
-  // Initialize Firebase
-  var config = {
-      apiKey: "AIzaSyBMXCPYCx0eCb5c1orujwW9VIoV5oYPHFI",
-      authDomain: "pos-poc-rpi.firebaseapp.com",
-      databaseURL: "https://pos-poc-rpi.firebaseio.com",
-      projectId: "pos-poc-rpi",
-      storageBucket: "pos-poc-rpi.appspot.com",
-      messagingSenderId: "879204075084"
-  };
-  firebase.initializeApp(config);
-  firebase.database().ref('/messages').on('value',function(snapshot){
-    try{
-        var entries=snapshot.val();
-        firebase.database().ref('/events').set([]);
-        insertMessages(entries,function(insertedMsgs){
-            if(io){
-                io.sockets.emit( 'broadcast', data );
-            }
-            getAllMessages(function(dbMsgs){
-                firebase.database().ref('/messages').set(dbMsgs.toJSON());
-            });
-        })
-        /*db.Message.bulkCreate(entries).then(()=>{
-            db.Message.findAll({
-                where: {}
-            }).then(function (dbMsgs) {
-                firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
-            });
-        });*/
-    }catch(e){
-        return;
-    }
-  });
-</script>
-<script>
-      function onLoad() {
-        $("#includedContent").load("login.html");
-      }
-      onLoad();
-      function onClickLoginBtn() {
-        var username = document.getElementById('usernameTF').value;
-        localStorage.setItem('Username', username);
-        $("#includedContent").load("home.html");
->>>>>>> 92a2261ef8b7a227a2c9c31759a42b7d3ad9f3a4
-      }
-    </script>
-  </body>
-</html>
+        </script>
+</body>
