@@ -24,9 +24,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
 <script>
-$(function(){
-    // $("#includedContent").load("login.html");
-  });
   // Initialize Firebase
   var config = {
       apiKey: "AIzaSyBMXCPYCx0eCb5c1orujwW9VIoV5oYPHFI",
@@ -105,14 +102,11 @@ $(function(){
       }
       function onClickLoginBtn() {
         var username = document.getElementById('usernameTF').value;
-        console.log(username);
         localStorage.setItem('Username', username);
-        // window.location.pathname = '/home';
         $("#includedContent").load("home.html");
-        // document.getElementById('includedContent').style.display = "none";
-        // document.getElementById('home').style.display = "block";
       }
       $("#includedContent").load("login.html");
+      console.log(1);
     </script>
   </body>
 </html>
