@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages { margin-bottom: 40px }
+    </style>
+    <link rel="stylesheet" href="./app.css">
+  </head>
+  <body>
+    <div id="includedContent" style="height: 100%; width: 100%;">
+
+    </div>
+    <script src="js/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+      apiKey: "AIzaSyBMXCPYCx0eCb5c1orujwW9VIoV5oYPHFI",
+      authDomain: "pos-poc-rpi.firebaseapp.com",
+      databaseURL: "https://pos-poc-rpi.firebaseio.com",
+      projectId: "pos-poc-rpi",
+      storageBucket: "pos-poc-rpi.appspot.com",
+      messagingSenderId: "879204075084"
+  };
+  firebase.initializeApp(config);
+  firebase.database().ref('/messages').on('value',function(snapshot){
+    try{
+        var entries=snapshot.val();
+        firebase.database().ref('/events').set([]);
+        insertMessages(entries,function(insertedMsgs){
+            if(io){
+                io.sockets.emit( 'broadcast', data );
+            }
+            getAllMessages(function(dbMsgs){
+                firebase.database().ref('/messages').set(dbMsgs.toJSON());
+            });
+        })
+        /*db.Message.bulkCreate(entries).then(()=>{
+            db.Message.findAll({
+                where: {}
+            }).then(function (dbMsgs) {
+                firebase.database().ref('/messages').set(JSON.parse(JSON.stringify(dbMsgs)));
+            });
+        });*/
+    }catch(e){
+        return;
+    }
+  });
+</script>
+<script>
+      function onLoad() {
+        $("#includedContent").load("login.html");
+      }
+      onLoad();
+      function onClickLoginBtn() {
+        var username = document.getElementById('usernameTF').value;
+        localStorage.setItem('Username', username);
+        $("#includedContent").load("home.html");
+      }
+    </script>
+  </body>
+</html>
